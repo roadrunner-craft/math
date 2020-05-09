@@ -41,6 +41,13 @@ impl Matrix4 {
     }
 
     pub fn row_echelon_form(&mut self) -> &mut Self {
+
+        for row in 0..self.dimensions() {
+            for col in 0..self.dimensions() {
+
+            }
+        }
+
         for d in 0..self.dimensions() {
             for y in d + 1..self.dimensions() {
                 if self[d][d] == 0.0 {
