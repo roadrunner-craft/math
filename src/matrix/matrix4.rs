@@ -250,7 +250,7 @@ mod tests {
             [13.0, 14.0, 15.0, 16.0],
         ]);
 
-        matrix.to_row_echelon_form();
+        matrix.row_echelon_form();
         assert_eq!(
             expects, matrix,
             "Did not return correct echelon form matrix"
