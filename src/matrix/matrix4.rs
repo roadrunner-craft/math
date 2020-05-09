@@ -235,7 +235,7 @@ mod tests {
     }
 
     #[test]
-    fn to_row_echelon_form_returns_row_echelon_form_matrix() {
+    fn row_echelon_form_returns_row_echelon_form_matrix() {
         let expects = super::Matrix4([
             [1.0, 2.0, 3.0, 4.0],
             [0.0, 4.0, 8.0, 12.0],
