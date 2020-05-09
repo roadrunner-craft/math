@@ -142,25 +142,23 @@ impl fmt::Debug for Matrix4 {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn zero_creates_zero_matrix() {
-        let expects = super::Matrix4([
+        let expects = Matrix4([
             [0.0, 0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0, 0.0],
         ]);
 
-        assert_eq!(
-            expects,
-            super::Matrix4::zero(),
-            "Did not create a zero matrix"
-        );
+        assert_eq!(expects, Matrix4::zero(), "Did not create a zero matrix");
     }
 
     #[test]
     fn identity_creates_identity_matrix() {
-        let expects = super::Matrix4([
+        let expects = Matrix4([
             [1.0, 0.0, 0.0, 0.0],
             [0.0, 1.0, 0.0, 0.0],
             [0.0, 0.0, 1.0, 0.0],
@@ -169,7 +167,7 @@ mod tests {
 
         assert_eq!(
             expects,
-            super::Matrix4::identity(),
+            Matrix4::identity(),
             "Did not create an identity matrix"
         );
     }
@@ -177,7 +175,7 @@ mod tests {
     #[test]
     fn dimensions_return_4() {
         let expects = 4;
-        let matrix = super::Matrix4([
+        let matrix = Matrix4([
             [1.0, 2.0, 3.0, 4.0],
             [5.0, 6.0, 7.0, 8.0],
             [9.0, 10.0, 11.0, 12.0],
@@ -193,14 +191,14 @@ mod tests {
 
     #[test]
     fn transpose_transposes_matrix() {
-        let expects = super::Matrix4([
+        let expects = Matrix4([
             [1.0, 2.0, 3.0, 4.0],
             [5.0, 6.0, 7.0, 8.0],
             [9.0, 10.0, 11.0, 12.0],
             [13.0, 14.0, 15.0, 16.0],
         ]);
 
-        let mut matrix = super::Matrix4([
+        let mut matrix = Matrix4([
             [1.0, 5.0, 9.0, 13.0],
             [2.0, 6.0, 10.0, 14.0],
             [3.0, 7.0, 11.0, 15.0],
@@ -213,14 +211,14 @@ mod tests {
 
     #[test]
     fn transposed_returns_transposed_matrix() {
-        let expects = super::Matrix4([
+        let expects = Matrix4([
             [1.0, 2.0, 3.0, 4.0],
             [5.0, 6.0, 7.0, 8.0],
             [9.0, 10.0, 11.0, 12.0],
             [13.0, 14.0, 15.0, 16.0],
         ]);
 
-        let matrix = super::Matrix4([
+        let matrix = Matrix4([
             [1.0, 5.0, 9.0, 13.0],
             [2.0, 6.0, 10.0, 14.0],
             [3.0, 7.0, 11.0, 15.0],
@@ -236,14 +234,14 @@ mod tests {
 
     #[test]
     fn row_echelon_form_returns_row_echelon_form_matrix() {
-        let expects = super::Matrix4([
+        let expects = Matrix4([
             [1.0, 2.0, 3.0, 4.0],
             [0.0, 4.0, 8.0, 12.0],
             [0.0, 0.0, 0.0, 0.0],
             [0.0, 0.0, 0.0, 0.0],
         ]);
 
-        let mut matrix = super::Matrix4([
+        let mut matrix = Matrix4([
             [1.0, 2.0, 3.0, 4.0],
             [5.0, 6.0, 7.0, 8.0],
             [9.0, 10.0, 11.0, 12.0],
@@ -260,7 +258,7 @@ mod tests {
     #[test]
     fn determinant_returns_correct_value() {
         let expects = -160.0;
-        let matrix = super::Matrix4([
+        let matrix = Matrix4([
             [1.0, 6.0, 3.0, 4.0],
             [5.0, 6.0, 7.0, 8.0],
             [9.0, 10.0, 11.0, 12.0],
@@ -277,7 +275,7 @@ mod tests {
     #[test]
     fn index_returns_correct_row() {
         let expects = [9.0, 10.0, 11.0, 12.0];
-        let matrix = super::Matrix4([
+        let matrix = Matrix4([
             [1.0, 2.0, 3.0, 4.0],
             [5.0, 6.0, 7.0, 8.0],
             [9.0, 10.0, 11.0, 12.0],
@@ -289,14 +287,14 @@ mod tests {
 
     #[test]
     fn index_mut_updates_correct_row() {
-        let expects = super::Matrix4([
+        let expects = Matrix4([
             [1.0, 2.0, 3.0, 4.0],
             [5.0, 6.0, 7.0, 8.0],
             [9.0, 10.0, 11.0, 12.0],
             [13.0, 14.0, 15.0, 16.0],
         ]);
 
-        let mut matrix = super::Matrix4([
+        let mut matrix = Matrix4([
             [1.0, 2.0, 3.0, 4.0],
             [5.0, 6.0, 7.0, 8.0],
             [0.0, 0.0, 0.0, 0.0],
@@ -311,21 +309,21 @@ mod tests {
 
     #[test]
     fn mul_returns_product_of_matrices() {
-        let expects = super::Matrix4([
+        let expects = Matrix4([
             [110.0, 128.0, 138.0, 132.0],
             [202.0, 248.0, 254.0, 240.0],
             [314.0, 392.0, 398.0, 380.0],
             [361.0, 466.0, 467.0, 465.0],
         ]);
 
-        let matrix1 = super::Matrix4([
+        let matrix1 = Matrix4([
             [1.0, 6.0, 3.0, 4.0],
             [5.0, 6.0, 7.0, 8.0],
             [9.0, 10.0, 11.0, 12.0],
             [13.0, 14.0, 15.0, 11.0],
         ]);
 
-        let matrix2 = super::Matrix4([
+        let matrix2 = Matrix4([
             [1.0, 6.0, 3.0, 4.0],
             [5.0, 6.0, 7.0, 8.0],
             [9.0, 10.0, 11.0, 12.0],
@@ -341,14 +339,14 @@ mod tests {
 
     #[test]
     fn neg_returns_negative_of_matrix() {
-        let expects = super::Matrix4([
+        let expects = Matrix4([
             [-1.0, -2.0, -3.0, -4.0],
             [-5.0, -6.0, -7.0, -8.0],
             [-9.0, -10.0, -11.0, -12.0],
             [-13.0, -14.0, -15.0, -11.0],
         ]);
 
-        let matrix = super::Matrix4([
+        let matrix = Matrix4([
             [1.0, 2.0, 3.0, 4.0],
             [5.0, 6.0, 7.0, 8.0],
             [9.0, 10.0, 11.0, 12.0],
