@@ -18,13 +18,13 @@ impl Matrix4 {
         ])
     }
 
-    pub fn dimensions(&self) -> usize {
+    pub fn size(&self) -> usize {
         4
     }
 
     pub fn transpose(&mut self) -> &mut Self {
-        for y in 0..self.dimensions() - 1 {
-            for x in (y + 1..self.dimensions()).rev() {
+        for y in 0..self.size() - 1 {
+            for x in (y + 1..self.size()).rev() {
                 let tmp = self[y][x];
                 self[y][x] = self[x][y];
                 self[x][y] = tmp;
@@ -38,39 +38,6 @@ impl Matrix4 {
         let mut m = self.clone();
         m.transpose();
         m
-    }
-
-    pub fn row_echelon_form(&mut self) -> &mut Self {
-        for d in 0..self.dimensions() {
-            for y in d + 1..self.dimensions() {
-                if self[d][d] == 0.0 {
-                    self[d][d] = 1.0e-18;
-                }
-
-                let scaler = self[y][d] / self[d][d];
-
-                for x in 0..self.dimensions() {
-                    self[y][x] = self[y][x] - scaler * self[d][x];
-                }
-            }
-        }
-
-        self
-    }
-
-    /// Returns the determinant of the matrix (read-only)
-    ///
-    /// This is done by finding the row echelon form of the matrix and then the determinant is the
-    /// product of its diagonal.
-    pub fn determinant(&self) -> f32 {
-        let mut m = self.clone();
-        m.row_echelon_form();
-
-        let mut det: f32 = m[0][0];
-        for d in 1..self.dimensions() {
-            det *= m[d][d]
-        }
-        det
     }
 }
 
@@ -94,10 +61,10 @@ impl ops::Mul for Matrix4 {
     fn mul(self, other: Matrix4) -> Self::Output {
         let mut m = Matrix4::zero();
 
-        for y in 0..self.dimensions() {
-            for x in 0..self.dimensions() {
+        for y in 0..self.size() {
+            for x in 0..self.size() {
                 let mut sum = 0.0;
-                for k in 0..self.dimensions() {
+                for k in 0..self.size() {
                     sum += self[y][k] * other[k][x];
                 }
                 m[y][x] = sum;
@@ -114,8 +81,8 @@ impl ops::Neg for Matrix4 {
     fn neg(self) -> Self::Output {
         let mut m = Matrix4::zero();
 
-        for y in 0..self.dimensions() {
-            for x in 0..self.dimensions() {
+        for y in 0..self.size() {
+            for x in 0..self.size() {
                 m[y][x] = -self[y][x];
             }
         }
@@ -173,7 +140,7 @@ mod tests {
     }
 
     #[test]
-    fn dimensions_return_4() {
+    fn size_return_4() {
         let expects = 4;
         let matrix = Matrix4([
             [1.0, 2.0, 3.0, 4.0],
@@ -182,11 +149,7 @@ mod tests {
             [13.0, 14.0, 15.0, 16.0],
         ]);
 
-        assert_eq!(
-            expects,
-            matrix.dimensions(),
-            "Did not return dimensions of 4"
-        );
+        assert_eq!(expects, matrix.size(), "Did not return size of 4");
     }
 
     #[test]
@@ -229,46 +192,6 @@ mod tests {
             expects,
             matrix.transposed(),
             "Did not return transposed matrix"
-        );
-    }
-
-    #[test]
-    fn row_echelon_form_returns_row_echelon_form_matrix() {
-        let expects = Matrix4([
-            [1.0, 2.0, 3.0, 4.0],
-            [0.0, 4.0, 8.0, 12.0],
-            [0.0, 0.0, 0.0, 0.0],
-            [0.0, 0.0, 0.0, 0.0],
-        ]);
-
-        let mut matrix = Matrix4([
-            [1.0, 2.0, 3.0, 4.0],
-            [5.0, 6.0, 7.0, 8.0],
-            [9.0, 10.0, 11.0, 12.0],
-            [13.0, 14.0, 15.0, 16.0],
-        ]);
-
-        matrix.row_echelon_form();
-        assert_eq!(
-            expects, matrix,
-            "Did not return correct echelon form matrix"
-        );
-    }
-
-    #[test]
-    fn determinant_returns_correct_value() {
-        let expects = -160.0;
-        let matrix = Matrix4([
-            [1.0, 6.0, 3.0, 4.0],
-            [5.0, 6.0, 7.0, 8.0],
-            [9.0, 10.0, 11.0, 12.0],
-            [13.0, 14.0, 15.0, 11.0],
-        ]);
-
-        assert_eq!(
-            expects,
-            matrix.determinant(),
-            "Did not return correct determinant"
         );
     }
 
