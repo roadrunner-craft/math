@@ -1,55 +1,48 @@
 use std::ops;
 
-use crate::math::vector::v3;
+use crate::vector::Vector3;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-#[allow(non_camel_case_types)]
 #[repr(C)]
-pub struct q {
+pub struct Quaternion {
     w: f32,
     x: f32,
     y: f32,
     z: f32,
 }
 
-impl q {
+impl Quaternion {
     pub fn new(w: f32, x: f32, y: f32, z: f32) -> Self {
         Self { w, x, y, z }
     }
 
-    #[allow(dead_code)]
     pub fn identity() -> Self {
         Self::new(1.0, 0.0, 0.0, 0.0)
     }
 
-    #[allow(dead_code)]
     pub fn conjugate(&self) -> Self {
         Self::new(self.w, -self.x, -self.y, -self.z)
     }
 
-    #[allow(dead_code)]
     pub fn dot(a: Self, b: Self) -> f32 {
         a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z
     }
 
-    #[allow(dead_code)]
     pub fn magnitude(self) -> f32 {
         Self::dot(self, self).sqrt()
     }
 
-    #[allow(dead_code)]
     pub fn normalize(&mut self) {
         *self = self.normalized();
     }
 
-    #[allow(dead_code)]
     pub fn normalized(&self) -> Self {
         let m = self.magnitude();
 
         Self::new(self.w / m, self.x / m, self.y / m, self.z / m)
     }
 
-    pub fn inverse(v: q) -> Self {
+    pub fn inverse(v: Quaternion) -> Self {
         v.conjugate() * (1. / v.magnitude().powi(2))
     }
 
@@ -60,11 +53,11 @@ impl q {
 
     pub fn slerp(a: Self, b: Self, t: f32) -> Self {
         let t = t.max(0.).min(1.);
-        let theta = q::dot(a, b).acos();
+        let theta = Quaternion::dot(a, b).acos();
         let sine = theta.sin();
 
         if sine == 0. {
-            return q::lerp(a, b, t);
+            return Quaternion::lerp(a, b, t);
         }
 
         let value = (((1. - t) * theta).sin() / sine) * a + ((t * theta).sin() / sine) * b;
@@ -72,7 +65,7 @@ impl q {
     }
 }
 
-impl ops::Add for q {
+impl ops::Add for Quaternion {
     type Output = Self;
 
     fn add(self, other: Self) -> Self::Output {
@@ -85,7 +78,7 @@ impl ops::Add for q {
     }
 }
 
-impl ops::Sub for q {
+impl ops::Sub for Quaternion {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self::Output {
@@ -98,7 +91,7 @@ impl ops::Sub for q {
     }
 }
 
-impl ops::Mul<f32> for q {
+impl ops::Mul<f32> for Quaternion {
     type Output = Self;
 
     fn mul(self, scalar: f32) -> Self::Output {
@@ -111,27 +104,27 @@ impl ops::Mul<f32> for q {
     }
 }
 
-impl ops::Mul<q> for f32 {
-    type Output = q;
+impl ops::Mul<Quaternion> for f32 {
+    type Output = Quaternion;
 
-    fn mul(self, q: q) -> Self::Output {
+    fn mul(self, q: Quaternion) -> Self::Output {
         Self::Output::new(self * q.w, self * q.x, self * q.y, self * q.z)
     }
 }
 
-impl ops::Mul for q {
+impl ops::Mul for Quaternion {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self::Output {
-        let u = v3::new(self.x, self.y, self.z);
-        let v = v3::new(other.x, other.y, other.z);
-        let w = v * self.w + u * other.w + v3::cross(u, v);
+        let u = Vector3::new(self.x, self.y, self.z);
+        let v = Vector3::new(other.x, other.y, other.z);
+        let w = v * self.w + u * other.w + Vector3::cross(u, v);
 
-        Self::Output::new(self.w * other.w - v3::dot(u, v), w.x, w.y, w.z)
+        Self::Output::new(self.w * other.w - Vector3::dot(u, v), w.x, w.y, w.z)
     }
 }
 
-impl Default for q {
+impl Default for Quaternion {
     fn default() -> Self {
         Self::identity()
     }

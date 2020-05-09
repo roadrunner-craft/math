@@ -16,12 +16,12 @@ struct NoiseOptions {
     seed: u32,
 }
 
-pub struct Noise {
+pub struct LayeredNoise {
     noise: Perlin,
     options: NoiseOptions,
 }
 
-impl Noise {
+impl LayeredNoise {
     pub fn new(octaves: u32, scale: f64, persistance: f64, lacunarity: f64, seed: u32) -> Self {
         Self {
             noise: Perlin::new().set_seed(seed),
