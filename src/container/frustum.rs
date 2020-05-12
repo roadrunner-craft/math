@@ -103,13 +103,13 @@ impl Frustum {
         let mut result = true;
 
         for plane in self.planes.iter() {
-            let vp = aabb.get_vp(&plane.normal);
+            let vp = aabb.vp(&plane.normal);
 
             if Vector3::dot(vp, plane.normal) + plane.origin_distance < 0.0 {
                 return false;
             }
 
-            let vn = aabb.get_vp(&plane.normal);
+            let vn = aabb.vp(&plane.normal);
 
             if Vector3::dot(vn, plane.normal) + plane.origin_distance < 0.0 {
                 result = true;
