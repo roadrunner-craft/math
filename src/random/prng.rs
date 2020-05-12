@@ -1,15 +1,15 @@
-use rand_pcg::Lcg64Xsh32;
 use rand_core::{RngCore, SeedableRng};
+use rand_pcg::Lcg64Xsh32;
+use std::ops::Range;
 use std::u32::MAX as U32_MAX;
 use std::u64::MAX as U64_MAX;
-use std::ops::Range;
 
-use crate::random::{SeedBuffer, Seed};
+use crate::random::{Seed, SeedBuffer};
 
 type Rng = Lcg64Xsh32;
 
 pub struct Prng {
-    rng: Rng
+    rng: Rng,
 }
 
 impl Prng {
@@ -36,6 +36,7 @@ impl Prng {
     }
 
     pub fn next_in_range(&mut self, range: Range<usize>) -> usize {
-        (self.next_f32() * range.end as f32 + range.start as f32) as usize
+        let height = range.end - range.start;
+        (self.next_f32() * height as f32 + range.start as f32) as usize
     }
 }
