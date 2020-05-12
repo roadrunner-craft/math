@@ -69,7 +69,7 @@ impl Transform {
         self
     }
 
-    pub fn get_matrix(&self) -> &Matrix4 {
+    pub fn matrix(&self) -> &Matrix4 {
         &self.m.as_ref().unwrap()
     }
 
