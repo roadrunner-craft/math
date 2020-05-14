@@ -96,10 +96,10 @@ impl Transform {
 
         let m21 = (sx * sy * cz - sz * cx) * self.scale.x;
         let m22 = (cx * cz + sz * sx * sy) * self.scale.y;
-        let m23 = (sx * cy) * self.scale.z;
+        let m23 = sx * cy * self.scale.z;
         let m24 = (sy * sx * cz - sz * cx) * self.position.x
             + (cx * cz + sz * sy * sx) * self.position.y
-            + (cy * sx) * self.position.z;
+            + cy * sx * self.position.z;
 
         let m31 = (cx * sy * cz + sz * sx) * self.scale.x;
         let m32 = (-sx * cz + sz * cx * sy) * self.scale.y;
@@ -108,14 +108,12 @@ impl Transform {
             + (sz * cx * sy - sx * cz) * self.position.y
             + (cx * cy) * self.position.z;
 
-        let mut m = Matrix4([
+        self.m = Some(Matrix4([
             [m11, m12, m13, m14],
             [m21, m22, m23, m24],
             [m31, m32, m33, m34],
             [0.0, 0.0, 0.0, 1.0],
-        ]);
-
-        self.m = Some(m);
+        ]));
     }
 }
 
