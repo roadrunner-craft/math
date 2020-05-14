@@ -89,19 +89,19 @@ impl Transform {
             ),
         );
 
-        let m11 = 1.0;
-        let m12 = 0.0;
-        let m13 = 0.0;
+        let m11 = cy * cz;
+        let m12 = cy * sz;
+        let m13 = -sy;
         let m14 = 0.0;
 
-        let m21 = 0.0;
-        let m22 = cx;
-        let m23 = sx;
+        let m21 = sx * sy * cz - sz * cx;
+        let m22 = cx * cz + sz * sx * sy;
+        let m23 = sx * cy;
         let m24 = 0.0;
 
-        let m31 = 0.0;
-        let m32 = -sx;
-        let m33 = cx;
+        let m31 = cx * sy * cz + sz * sx;
+        let m32 = -sx * cz + sz * cx * sy;
+        let m33 = cx * cy;
         let m34 = 0.0;
 
         let mut m = Matrix4([
@@ -112,19 +112,6 @@ impl Transform {
         ]);
 
         // TODO: reduce this into a single Matrix4 assignment
-        m = m * Matrix4([
-            [cy, 0.0, -sy, 0.0],
-            [0.0, 1.0, 0.0, 0.0],
-            [sy, 0.0, cy, 0.0],
-            [0.0, 0.0, 0.0, 1.0],
-        ]);
-
-        m = m * Matrix4([
-            [cz, sz, 0.0, 0.0],
-            [-sz, cz, 0.0, 0.0],
-            [0.0, 0.0, 1.0, 0.0],
-            [0.0, 0.0, 0.0, 1.0],
-        ]);
 
         m = m * Matrix4([
             [1.0, 0.0, 0.0, self.position.x],
