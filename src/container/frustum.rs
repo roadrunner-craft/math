@@ -39,7 +39,6 @@ impl Frustum {
 
     /// m: projection * view matrix
     pub fn update(&mut self, m: &Matrix4) {
-        // near
         self.planes[FrustumPlaneType::Near as usize] = FrustumPlane {
             normal: Vector3 {
                 x: m[3][0] + m[2][0],
