@@ -89,41 +89,29 @@ impl Transform {
             ),
         );
 
-        let m11 = cy * cz;
-        let m12 = cy * sz;
-        let m13 = -sy;
-        let m14 = 0.0;
+        let m11 = cy * cz * self.scale.x;
+        let m12 = cy * sz * self.scale.y;
+        let m13 = -sy * self.scale.z;
+        let m14 = cy * cz * self.position.x + sz * cy * self.position.y - sy * self.position.z;
 
-        let m21 = sx * sy * cz - sz * cx;
-        let m22 = cx * cz + sz * sx * sy;
-        let m23 = sx * cy;
-        let m24 = 0.0;
+        let m21 = (sx * sy * cz - sz * cx) * self.scale.x;
+        let m22 = (cx * cz + sz * sx * sy) * self.scale.y;
+        let m23 = (sx * cy) * self.scale.z;
+        let m24 = (sy * sx * cz - sz * cx) * self.position.x
+            + (cx * cz + sz * sy * sx) * self.position.y
+            + (cy * sx) * self.position.z;
 
-        let m31 = cx * sy * cz + sz * sx;
-        let m32 = -sx * cz + sz * cx * sy;
-        let m33 = cx * cy;
-        let m34 = 0.0;
+        let m31 = (cx * sy * cz + sz * sx) * self.scale.x;
+        let m32 = (-sx * cz + sz * cx * sy) * self.scale.y;
+        let m33 = (cx * cy) * self.scale.z;
+        let m34 = (cx * sy * cz + sz * cx * sy) * self.position.x
+            + (sz * cx * sy - sx * cz) * self.position.y
+            + (cx * cy) * self.position.z;
 
         let mut m = Matrix4([
             [m11, m12, m13, m14],
             [m21, m22, m23, m24],
             [m31, m32, m33, m34],
-            [0.0, 0.0, 0.0, 1.0],
-        ]);
-
-        // TODO: reduce this into a single Matrix4 assignment
-
-        m = m * Matrix4([
-            [1.0, 0.0, 0.0, self.position.x],
-            [0.0, 1.0, 0.0, self.position.y],
-            [0.0, 0.0, 1.0, self.position.z],
-            [0.0, 0.0, 0.0, 1.0],
-        ]);
-
-        m = m * Matrix4([
-            [self.scale.x, 0.0, 0.0, 0.0],
-            [0.0, self.scale.y, 0.0, 0.0],
-            [0.0, 0.0, self.scale.z, 0.0],
             [0.0, 0.0, 0.0, 1.0],
         ]);
 
