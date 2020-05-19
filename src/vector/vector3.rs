@@ -1,7 +1,8 @@
+use serde::{Deserialize, Serialize};
 use std::fmt;
 use std::ops;
 
-#[derive(Default, Clone, Copy, PartialEq)]
+#[derive(Default, Clone, Copy, PartialEq, Serialize, Deserialize)]
 #[repr(C)]
 pub struct Vector3 {
     pub x: f32,
