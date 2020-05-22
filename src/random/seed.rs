@@ -1,13 +1,17 @@
+use serde::{Deserialize, Serialize};
 use std::convert::From;
-use std::time::SystemTime;
 use std::iter;
+use std::time::SystemTime;
 
-#[derive(Copy, Clone, Default, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Default, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Seed(pub u32);
 
 impl Seed {
     pub fn new() -> Self {
-        let value = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs();
+        let value = SystemTime::now()
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .unwrap()
+            .as_secs();
         Seed((value & 0xffffffff) as u32)
     }
 }
