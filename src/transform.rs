@@ -63,10 +63,9 @@ impl Transform {
         self.rotation
     }
 
-    pub fn set_euler_angles(&mut self, value: Vector3) -> &mut Self {
+    pub fn set_euler_angles(&mut self, value: Vector3) {
         self.rotation = value;
         self.generate_matrix();
-        self
     }
 
     pub fn matrix(&self) -> &Matrix4 {

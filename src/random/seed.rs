@@ -11,7 +11,7 @@ impl Seed {
         let value = SystemTime::now()
             .duration_since(SystemTime::UNIX_EPOCH)
             .unwrap()
-            .as_secs();
+            .as_millis();
         Seed((value & 0xffffffff) as u32)
     }
 }
