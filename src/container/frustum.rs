@@ -20,7 +20,7 @@ struct FrustumPlane {
 impl FrustumPlane {
     fn normalize(&mut self) {
         let length = self.normal.magnitude();
-        self.normal = self.normal * (1.0 / length);
+        self.normal = self.normal * length.recip();
         self.origin_distance = self.origin_distance / length;
     }
 }
@@ -108,7 +108,7 @@ impl Frustum {
                 return false;
             }
 
-            let vn = aabb.vp(&plane.normal);
+            let vn = aabb.vn(&plane.normal);
 
             if Vector3::dot(vn, plane.normal) + plane.origin_distance < 0.0 {
                 result = true;

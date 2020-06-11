@@ -3,4 +3,5 @@ pub mod matrix;
 pub mod quaternion;
 pub mod random;
 pub mod transform;
+pub mod utils;
 pub mod vector;
