@@ -1,3 +1,4 @@
+use crate::geometry::Line;
 use crate::vector::Vector2;
 
 #[derive(Copy, Clone)]
@@ -20,24 +21,20 @@ impl Rect {
         Self::new(origin, size, size)
     }
 
+    pub fn x(&self) -> Line {
+        Line::new(self.origin.x, self.size.x)
+    }
+
+    pub fn y(&self) -> Line {
+        Line::new(self.origin.y, self.size.y)
+    }
+
     pub fn contains(&self, point: Vector2) -> bool {
-        let Vector2 { x, y } = self.origin;
-        let Vector2 { x: ox, y: oy } = self.origin + self.size;
-        let range = |a: f32, b| a.min(b)..=a.max(b);
-        range(x, ox).contains(&point.x) && range(y, oy).contains(&point.y)
+        self.x().contains(point.x) && self.y().contains(point.y)
     }
 
-    fn corners(&self) -> [Vector2; 4] {
-        [
-            self.origin,
-            self.origin + self.size.x(),
-            self.origin + self.size.y(),
-            self.origin + self.size,
-        ]
-    }
-
-    pub fn intersects(&self, other: &Rect) -> bool {
-        self.corners().iter().any(|&p| other.contains(p))
+    pub fn intersects(&self, other: Rect) -> bool {
+        self.x().intersects(other.x()) && self.y().intersects(other.y())
     }
 }
 
@@ -61,8 +58,8 @@ mod tests {
     fn intersects() {
         let square = Rect::square(Vector2::new(0.0, 0.0), 5.0);
         let other = Rect::square(Vector2::new(2.0, 3.0), 5.0);
-        assert!(square.intersects(&other));
+        assert!(square.intersects(other));
         let other = Rect::square(Vector2::new(10.0, 10.0), 5.0);
-        assert!(!square.intersects(&other));
+        assert!(!square.intersects(other));
     }
 }

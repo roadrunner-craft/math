@@ -76,6 +76,18 @@ impl Vector3 {
 
         Self::new(self.x / m, self.y / m, self.z / m)
     }
+
+    pub fn x(&self) -> Self {
+        Vector3::new(self.x, 0.0, 0.0)
+    }
+
+    pub fn y(&self) -> Self {
+        Vector3::new(0.0, self.y, 0.0)
+    }
+
+    pub fn z(&self) -> Self {
+        Vector3::new(0.0, 0.0, self.z)
+    }
 }
 
 impl ops::Add for Vector3 {
