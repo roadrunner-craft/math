@@ -58,6 +58,14 @@ impl Vector2 {
 
         Self::new(self.x / m, self.y / m)
     }
+
+    pub fn x(self) -> Self {
+        Self { x: self.x, y: 0.0 }
+    }
+
+    pub fn y(self) -> Self {
+        Self { x: 0.0, y: self.y }
+    }
 }
 
 impl ops::Add for Vector2 {
