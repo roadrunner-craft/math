@@ -3,31 +3,40 @@ use crate::vector::Vector3;
 
 /// Axis-aligned bounding box
 pub struct AABB {
-    volume: Box,
+    bound: Box,
+}
+
+#[inline]
+fn orzero(condition: bool, value: f32) -> f32 {
+    if condition {
+        value
+    } else {
+        0.0
+    }
 }
 
 impl AABB {
-    pub fn new(volume: Box) -> Self {
-        Self { volume }
+    pub fn new(bound: Box) -> Self {
+        Self { bound }
     }
 
     /// volume on the positive side of the plane
     pub fn vp(&self, normal: &Vector3) -> Vector3 {
-        self.volume.origin
+        self.bound.origin
             + Vector3 {
-                x: (normal.x.signum() * self.volume.size.x).max(0.0),
-                y: (normal.y.signum() * self.volume.size.y).max(0.0),
-                z: (normal.z.signum() * self.volume.size.z).max(0.0),
+                x: orzero(normal.x > 0.0, self.bound.size.x),
+                y: orzero(normal.y > 0.0, self.bound.size.y),
+                z: orzero(normal.z > 0.0, self.bound.size.z),
             }
     }
 
     /// volume on the negative side of the plane
     pub fn vn(&self, normal: &Vector3) -> Vector3 {
-        self.volume.origin
+        self.bound.origin
             - Vector3 {
-                x: (normal.x.signum() * self.volume.size.x).min(0.0),
-                y: (normal.y.signum() * self.volume.size.y).min(0.0),
-                z: (normal.z.signum() * self.volume.size.z).min(0.0),
+                x: orzero(normal.x < 0.0, self.bound.size.x),
+                y: orzero(normal.y < 0.0, self.bound.size.y),
+                z: orzero(normal.z < 0.0, self.bound.size.z),
             }
     }
 }

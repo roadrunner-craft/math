@@ -19,25 +19,17 @@ impl Box {
         Self::new(origin, size, size, size)
     }
 
-    pub fn x(&self) -> Line {
-        Line::new(self.origin.x, self.size.x)
-    }
-
-    pub fn y(&self) -> Line {
-        Line::new(self.origin.y, self.size.y)
-    }
-
-    pub fn z(&self) -> Line {
-        Line::new(self.origin.z, self.size.z)
-    }
-
     pub fn contains(self, point: Vector3) -> bool {
-        self.x().contains(point.x) && self.y().contains(point.y) && self.z().contains(point.z)
+        Line::new(self.origin.x, self.size.x).contains(point.x)
+            && Line::new(self.origin.y, self.size.y).contains(point.y)
+            && Line::new(self.origin.z, self.size.z).contains(point.z)
     }
 
     pub fn intersects(&self, other: &Box) -> bool {
-        self.x().intersects(other.x())
-            && self.y().intersects(other.y())
-            && self.z().intersects(other.z())
+        Line::new(self.origin.x, self.size.x).intersects(Line::new(other.origin.x, other.size.x))
+            && Line::new(self.origin.y, self.size.y)
+                .intersects(Line::new(other.origin.y, other.size.y))
+            && Line::new(self.origin.z, self.size.z)
+                .intersects(Line::new(other.origin.z, other.size.z))
     }
 }

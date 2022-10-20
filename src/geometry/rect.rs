@@ -21,20 +21,15 @@ impl Rect {
         Self::new(origin, size, size)
     }
 
-    pub fn x(&self) -> Line {
-        Line::new(self.origin.x, self.size.x)
-    }
-
-    pub fn y(&self) -> Line {
-        Line::new(self.origin.y, self.size.y)
-    }
-
     pub fn contains(&self, point: Vector2) -> bool {
-        self.x().contains(point.x) && self.y().contains(point.y)
+        Line::new(self.origin.x, self.size.x).contains(point.x)
+            && Line::new(self.origin.y, self.size.y).contains(point.y)
     }
 
     pub fn intersects(&self, other: Rect) -> bool {
-        self.x().intersects(other.x()) && self.y().intersects(other.y())
+        Line::new(self.origin.x, self.size.x).intersects(Line::new(other.origin.x, other.size.x))
+            && Line::new(self.origin.y, self.size.y)
+                .intersects(Line::new(other.origin.y, other.size.y))
     }
 }
 
