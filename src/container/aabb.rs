@@ -2,7 +2,7 @@ use crate::geometry::Box;
 use crate::utils::ternary;
 use crate::vector::Vector3;
 
-/// Axis-aligned boundsing box
+/// Axis-aligned bounding box
 pub struct AABB {
     bounds: Box,
 }
