@@ -1,42 +1,34 @@
 use crate::geometry::Box;
+use crate::utils::ternary;
 use crate::vector::Vector3;
 
-/// Axis-aligned bounding box
+/// Axis-aligned boundsing box
 pub struct AABB {
-    bound: Box,
-}
-
-#[inline]
-fn orzero(condition: bool, value: f32) -> f32 {
-    if condition {
-        value
-    } else {
-        0.0
-    }
+    bounds: Box,
 }
 
 impl AABB {
-    pub fn new(bound: Box) -> Self {
-        Self { bound }
+    pub fn new(bounds: Box) -> Self {
+        Self { bounds }
     }
 
     /// volume on the positive side of the plane
     pub fn vp(&self, normal: &Vector3) -> Vector3 {
-        self.bound.origin
+        self.bounds.origin
             + Vector3 {
-                x: orzero(normal.x > 0.0, self.bound.size.x),
-                y: orzero(normal.y > 0.0, self.bound.size.y),
-                z: orzero(normal.z > 0.0, self.bound.size.z),
+                x: ternary(normal.x > 0.0, self.bounds.size.x, 0.0),
+                y: ternary(normal.y > 0.0, self.bounds.size.y, 0.0),
+                z: ternary(normal.z > 0.0, self.bounds.size.z, 0.0),
             }
     }
 
     /// volume on the negative side of the plane
     pub fn vn(&self, normal: &Vector3) -> Vector3 {
-        self.bound.origin
+        self.bounds.origin
             - Vector3 {
-                x: orzero(normal.x < 0.0, self.bound.size.x),
-                y: orzero(normal.y < 0.0, self.bound.size.y),
-                z: orzero(normal.z < 0.0, self.bound.size.z),
+                x: ternary(normal.x < 0.0, self.bounds.size.x, 0.0),
+                y: ternary(normal.y < 0.0, self.bounds.size.y, 0.0),
+                z: ternary(normal.z < 0.0, self.bounds.size.z, 0.0),
             }
     }
 }

@@ -7,3 +7,12 @@ pub fn next_power_of_two(a: u32) -> u32 {
     x |= x >> 16;
     x + 1
 }
+
+#[inline]
+pub fn ternary<T>(condition: bool, a: T, b: T) -> T {
+    if condition {
+        a
+    } else {
+        b
+    }
+}
