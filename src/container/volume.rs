@@ -1,3 +1,5 @@
+use crate::vector::Vector3;
+
 #[derive(Copy, Clone, Debug, Default, PartialEq, Eq)]
 pub struct Volume {
     pub x: i64,
@@ -27,6 +29,18 @@ impl Volume {
             && y < self.y + self.height
             && z >= self.z
             && z < self.z + self.depth
+    }
+
+    pub fn min(&self) -> Vector3 {
+        Vector3::new(self.x as f32, self.y as f32, self.z as f32)
+    }
+
+    pub fn max(&self) -> Vector3 {
+        Vector3::new(
+            (self.x + self.width) as f32,
+            (self.y + self.height) as f32,
+            (self.z + self.depth) as f32,
+        )
     }
 }
 
